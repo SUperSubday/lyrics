@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Lyrics Display</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #ffdde1, #ff80ab);
+            font-family: 'Mukta', 'Tiro Devanagari Hindi', sans-serif;
+            text-align: center;
+            color: #d6336c;
+            overflow: hidden;
+        }
+        .container {
+            margin-top: 20vh;
+            font-size: 2.5rem;
+            font-weight: bold;
+            min-height: 100px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .heart {
+            position: absolute;
+            color: #ff8a80;
+            font-size: 2.5rem;
+            animation: heartFloat 5s linear infinite;
+        }
+        @keyframes heartFloat {
+            0% {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 1;
+                color: #ff8a80;
+            }
+            50% {
+                color: #d6336c;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1.2);
+                opacity: 0;
+                color: #ff8a80;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="lyrics"></div>
+    <script>
+        const lyrics = [
+           " तिम्रो लागि एक हैन",
+"हजारै जन्म पनि लिउला म", 
+"खुसी सारा तिमिलाई दिएर ",
+"आँसु सबै आफै लिउला म", 
+"आँखा तिम्लाई हेरि रहन्छ", 
+"तर किन सपना लाग्छ", 
+"सपना नै हो भने यो", 
+"अब सायद नबिउझिउला म ।"
+        ];
+        
+        let index = 0;
+        function typeLyrics() {
+            if (index < lyrics.length) {
+                let line = lyrics[index];
+                let i = 0;
+                let display = '';
+                let speed = 100;
+                
+                function typeCharacter() {
+                    if (i < line.length) {
+                        display += line[i];
+                        document.getElementById("lyrics").innerHTML += line[i]; // Append each character
+                        i++;
+                        setTimeout(typeCharacter, speed);
+                    } else {
+                        // After each sentence, add a <br> to break the line
+                        document.getElementById("lyrics").innerHTML += "<br>";
+                        setTimeout(() => {
+                            index++;
+                            typeLyrics(); // Proceed to next line without clearing previous
+                        }, 1000);
+                    }
+                }
+                typeCharacter();
+            }
+        }
+        
+        function createHearts() {
+            setInterval(() => {
+                let heart = document.createElement("div");
+                heart.classList.add("heart");
+                heart.innerHTML = "❤";
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.animationDuration = Math.random() * 3 + 3 + "s";
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 5000);
+            }, 500);
+        }
+        
+        createHearts();
+        typeLyrics();
+    </script>
+</body>
+</html>
