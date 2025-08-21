@@ -4,29 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Love Lyrics Display</title>
-    <link href="https://fonts.googleapis.com/css2?family=Mukta&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;700&family=Tiro+Devanagari+Hindi:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             background: linear-gradient(135deg, #ffdde1, #ff80ab);
-            font-family: 'Mukta', 'Tiro Devanagari Hindi', sans-serif;
+            font-family: 'Tiro Devanagari Hindi', 'Mukta', sans-serif;
             text-align: center;
             color: #d6336c;
             overflow: hidden;
         }
         .container {
-            margin-top: 20vh;
-            font-size: 2.5rem;
-            font-weight: bold;
-            min-height: 100px;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            margin-top: 12vh;
+            font-size: 2.1rem;
+            font-weight: 700;
+            min-height: 180px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.13);
             white-space: pre-wrap;
-            word-wrap: break-word;
+            word-break: break-word;
+            max-width: 95vw;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+            letter-spacing: 0.5px;
         }
         .heart {
             position: absolute;
             color: #ff8a80;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             animation: heartFloat 5s linear infinite;
+            pointer-events: none;
+            opacity: 0.85;
         }
         @keyframes heartFloat {
             0% {
@@ -43,20 +50,42 @@
                 color: #ff8a80;
             }
         }
+        @media (max-width: 600px) {
+            .container {
+                font-size: 1.1rem;
+                min-height: 80px;
+                margin-top: 7vh;
+            }
+        }
+        #ytplayer {
+            width: 0;
+            height: 0;
+            border: 0;
+            position: absolute;
+            left: -9999px;
+        }
     </style>
 </head>
 <body>
     <div class="container" id="lyrics"></div>
+    <!-- Hidden YouTube audio -->
+    <iframe 
+        id="ytplayer"
+        src=""
+        allow="autoplay"
+        frameborder="0"
+        allowfullscreen
+    ></iframe>
     <script>
         const lyrics = [
            " तिम्रो लागि एक हैन",
-"हजारै जन्म पनि लिउला म", 
-"खुसी सारा तिमिलाई दिएर ",
-"आँसु सबै आफै लिउला म", 
-"आँखा तिम्लाई हेरि रहन्छ", 
-"तर किन सपना लाग्छ", 
-"सपना नै हो भने यो", 
-"अब सायद नबिउझिउला म ।"
+           "हजारै जन्म पनि लिउला म", 
+           "खुसी सारा तिमिलाई दिएर ",
+           "आँसु सबै आफै लिउला म", 
+           "आँखा तिम्लाई हेरि रहन्छ", 
+           "तर किन सपना लाग्छ", 
+           "सपना नै हो भने यो", 
+           "अब सायद नबिउझिउला म ।"
         ];
         
         let index = 0;
@@ -64,21 +93,17 @@
             if (index < lyrics.length) {
                 let line = lyrics[index];
                 let i = 0;
-                let display = '';
                 let speed = 100;
-                
                 function typeCharacter() {
                     if (i < line.length) {
-                        display += line[i];
-                        document.getElementById("lyrics").innerHTML += line[i]; // Append each character
+                        document.getElementById("lyrics").innerHTML += line[i];
                         i++;
                         setTimeout(typeCharacter, speed);
                     } else {
-                        // After each sentence, add a <br> to break the line
                         document.getElementById("lyrics").innerHTML += "<br>";
                         setTimeout(() => {
                             index++;
-                            typeLyrics(); // Proceed to next line without clearing previous
+                            typeLyrics();
                         }, 1000);
                     }
                 }
@@ -92,14 +117,24 @@
                 heart.classList.add("heart");
                 heart.innerHTML = "❤";
                 heart.style.left = Math.random() * 100 + "vw";
-                heart.style.animationDuration = Math.random() * 3 + 3 + "s";
+                heart.style.fontSize = (2 + Math.random() * 2) + "rem";
+                heart.style.animationDuration = (Math.random() * 2 + 4) + "s";
                 document.body.appendChild(heart);
                 setTimeout(() => heart.remove(), 5000);
-            }, 500);
+            }, 400);
         }
-        
-        createHearts();
-        typeLyrics();
+
+        function playYouTubeAudio() {
+            // Set the src only when starting, to ensure autoplay after user interaction
+            const yt = document.getElementById('ytplayer');
+            yt.src = "https://www.youtube.com/embed/N9kVB6Wyomw?autoplay=1&loop=1&playlist=N9kVB6Wyomw";
+        }
+
+        window.onload = function() {
+            playYouTubeAudio();
+            createHearts();
+            typeLyrics();
+        };
     </script>
 </body>
 </html>
